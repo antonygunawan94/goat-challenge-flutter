@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:goat_challenge/src/main/models/main_book.dart';
-import 'package:goat_challenge/src/main/models/main_search_book_result.dart';
-import 'package:goat_challenge/src/main/services/main_book_service.dart';
 import 'package:goat_challenge/src/route/goat_challenge_routes.dart';
+import 'package:goat_challenge/src/similar/models/similar_book.dart';
+import 'package:goat_challenge/src/similar/models/similar_search_book_result.dart';
+import 'package:goat_challenge/src/similar/services/similar_book_service.dart';
 
-class MainPageController extends GetxController
-    with StateMixin<List<MainBook>> {
-  static MainPageController of() => Get.find<MainPageController>();
+class SimilarPageController extends GetxController
+    with StateMixin<List<SimilarBook>> {
+  static SimilarPageController of() => Get.find<SimilarPageController>();
 
-  final _service = MainBookService.of();
+  final _service = SimilarBookService.of();
   final _scrollController = ScrollController();
 
-  final _searchQuery = "".obs;
-
-  MainSearchBookResult? _previousResult;
+  SimilarSearchBookResult? _previousResult;
   bool _isRequestingNextBook = false;
 
-  set searchQuery(String query) => _searchQuery.value = query;
+  String get findBy {
+    if (Get.parameters["author"] != null) {
+      return "Author: ${Get.parameters["author"]!}";
+    }
+
+    if (Get.parameters["subject"] != null) {
+      return "Subject: ${Get.parameters["subject"]!}";
+    }
+
+    if (Get.parameters["bookshelf"] != null) {
+      return "Bookshelf: ${Get.parameters["bookshelf"]!}";
+    }
+
+    return "";
+  }
 
   bool get hasMoreBooks => status.isLoadingMore;
 
@@ -26,7 +38,12 @@ class MainPageController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    searchBooks("");
+
+    final search = Get.parameters["author"] ?? "";
+    final topic =
+        Get.parameters["subject"] ?? Get.parameters["bookshelf"] ?? "";
+    searchBooks(search: search, topic: topic);
+
     _initListener();
   }
 
@@ -34,19 +51,19 @@ class MainPageController extends GetxController
     Get.toNamed(GoatChallengeRoutes.detail(id: id));
   }
 
-  void searchBooks(String query) async {
+  void searchBooks({String search = "", String topic = ""}) async {
     _clear();
 
     change([], status: RxStatus.loading());
 
     try {
-      final response = await _service.searchBooks(query);
+      final response = await _service.searchBooks(search: search, topic: topic);
       if (response.hasError) {
         change([], status: RxStatus.error(response.bodyString));
         return;
       }
 
-      final result = MainSearchBookResult.fromMap(response.body);
+      final result = SimilarSearchBookResult.fromMap(response.body);
 
       if (result.next == null) {
         if (result.books.isEmpty) {
@@ -83,6 +100,8 @@ class MainPageController extends GetxController
       return;
     }
 
+    print("next: $next");
+
     try {
       final response = await _service.nextBooks(next);
       if (response.hasError) {
@@ -90,7 +109,7 @@ class MainPageController extends GetxController
         return;
       }
 
-      final result = MainSearchBookResult.fromMap(response.body);
+      final result = SimilarSearchBookResult.fromMap(response.body);
 
       final newBooks = state + result.books;
 
@@ -116,9 +135,6 @@ class MainPageController extends GetxController
         nextBooks();
       }
     });
-
-    debounce(_searchQuery, (_) => searchBooks(_searchQuery.value),
-        time: const Duration(milliseconds: 700));
   }
 
   void _clear() {

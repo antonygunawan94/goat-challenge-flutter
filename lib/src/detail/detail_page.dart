@@ -23,8 +23,6 @@ class DetailPage extends StatelessWidget {
           (book) {
             if (book == null) return const Center(child: Text("Not found"));
 
-            print(book.formats.textHtmlCharsetUtf8);
-
             return SingleChildScrollView(
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 15.w),
@@ -58,7 +56,7 @@ class DetailPage extends StatelessWidget {
                             GoatChallengeConsts.emptyImageLink,
                         author: book.authors.isNotEmpty
                             ? book.authors.first.name
-                            : "Unrecognized Author",
+                            : null,
                         languages: book.languages,
                       ),
                     ),
@@ -82,14 +80,19 @@ class DetailPage extends StatelessWidget {
                                 shrinkWrap: true,
                                 physics: const ClampingScrollPhysics(),
                                 itemCount: book.subjects.length,
-                                itemBuilder: (context, index) => Container(
-                                  margin:
-                                      EdgeInsets.symmetric(vertical: 2.25.h),
-                                  child: Text(
-                                    "· ${book.subjects[index]}",
-                                    style: TextStyle(
-                                      fontSize: 14.sp,
-                                      color: Colors.black87,
+                                itemBuilder: (context, index) => InkWell(
+                                  onTap: () => DetailPageController.of()
+                                      .findSimilarBooksBy(
+                                          subject: book.subjects[index]),
+                                  child: Container(
+                                    margin:
+                                        EdgeInsets.symmetric(vertical: 2.25.h),
+                                    child: Text(
+                                      "· ${book.subjects[index]}",
+                                      style: TextStyle(
+                                        fontSize: 14.sp,
+                                        color: Colors.black87,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -118,14 +121,19 @@ class DetailPage extends StatelessWidget {
                                 shrinkWrap: true,
                                 physics: const ClampingScrollPhysics(),
                                 itemCount: book.bookshelves.length,
-                                itemBuilder: (context, index) => Container(
-                                  margin:
-                                      EdgeInsets.symmetric(vertical: 2.25.h),
-                                  child: Text(
-                                    "· ${book.bookshelves[index]}",
-                                    style: TextStyle(
-                                      fontSize: 14.sp,
-                                      color: Colors.black87,
+                                itemBuilder: (context, index) => InkWell(
+                                  onTap: () => DetailPageController.of()
+                                      .findSimilarBooksBy(
+                                          bookshelf: book.bookshelves[index]),
+                                  child: Container(
+                                    margin:
+                                        EdgeInsets.symmetric(vertical: 2.25.h),
+                                    child: Text(
+                                      "· ${book.bookshelves[index]}",
+                                      style: TextStyle(
+                                        fontSize: 14.sp,
+                                        color: Colors.black87,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -154,14 +162,19 @@ class DetailPage extends StatelessWidget {
                                 shrinkWrap: true,
                                 physics: const ClampingScrollPhysics(),
                                 itemCount: book.authors.length,
-                                itemBuilder: (context, index) => Container(
-                                  margin:
-                                      EdgeInsets.symmetric(vertical: 2.25.h),
-                                  child: Text(
-                                    "· ${book.authors[index].name}",
-                                    style: TextStyle(
-                                      fontSize: 14.sp,
-                                      color: Colors.black87,
+                                itemBuilder: (context, index) => InkWell(
+                                  onTap: () => DetailPageController.of()
+                                      .findSimilarBooksBy(
+                                          author: book.bookshelves[index]),
+                                  child: Container(
+                                    margin:
+                                        EdgeInsets.symmetric(vertical: 2.25.h),
+                                    child: Text(
+                                      "· ${book.authors[index].name}",
+                                      style: TextStyle(
+                                        fontSize: 14.sp,
+                                        color: Colors.black87,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -177,7 +190,7 @@ class DetailPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "All Authors",
+                              "All Translators",
                               style: TextStyle(
                                 fontSize: 15.8.sp,
                                 color: Colors.black87,

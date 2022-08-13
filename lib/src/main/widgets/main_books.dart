@@ -25,7 +25,7 @@ class MainBooks extends StatelessWidget {
                 return Center(
                   child: Container(
                     margin: EdgeInsets.only(bottom: 20.h),
-                    child: CircularProgressIndicator(),
+                    child: const CircularProgressIndicator(),
                   ),
                 );
               }
@@ -73,10 +73,10 @@ class MainBooks extends StatelessWidget {
         ),
       ),
       onEmpty: const SliverToBoxAdapter(
-        child: Text("emtpy"),
+        child: Text("Empty"),
       ),
       onError: (error) =>
-          const SliverToBoxAdapter(child: Text("Something went wrong")),
+          SliverToBoxAdapter(child: Text(error ?? "Something went wrong")),
     );
   }
 }

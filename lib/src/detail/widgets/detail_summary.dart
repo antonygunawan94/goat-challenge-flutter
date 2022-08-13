@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:goat_challenge/src/detail/detail_page_controller.dart';
 
 class DetailSummary extends StatelessWidget {
   final String title;
   final String imageUrl;
-  final String author;
+  final String? author;
   final List<String> languages;
 
   const DetailSummary({
@@ -37,9 +38,8 @@ class DetailSummary extends StatelessWidget {
             height: double.maxFinite,
             imageUrl: imageUrl,
             placeholder: (context, url) =>
-            const Center(child: CircularProgressIndicator()),
+                const Center(child: CircularProgressIndicator()),
             fit: BoxFit.cover,
-            
           ),
           Expanded(
             child: Container(
@@ -60,15 +60,21 @@ class DetailSummary extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(bottom: 20.h),
-                    child: Text(
-                      author,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        color: Colors.grey.shade400,
+                  InkWell(
+                    onTap: author != null
+                        ? () => DetailPageController.of()
+                            .findSimilarBooksBy(author: author!)
+                        : null,
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 20.h),
+                      child: Text(
+                        author ?? "Unrecognized Author",
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          color: Colors.grey.shade400,
+                        ),
                       ),
                     ),
                   ),
@@ -78,8 +84,7 @@ class DetailSummary extends StatelessWidget {
                     margin: EdgeInsets.only(bottom: 10.h),
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount:
-                      languages.length > 3 ? 3 : languages.length,
+                      itemCount: languages.length > 3 ? 3 : languages.length,
                       itemBuilder: (context, index) {
                         var margin = EdgeInsets.symmetric(horizontal: 5.w);
 
@@ -88,8 +93,7 @@ class DetailSummary extends StatelessWidget {
                         }
 
                         final maxLength =
-                            (languages.length > 3 ? 3 : languages.length) -
-                                1;
+                            (languages.length > 3 ? 3 : languages.length) - 1;
 
                         if (index == maxLength && maxLength != 0) {
                           margin = EdgeInsets.only(left: 5.w, right: 0.w);

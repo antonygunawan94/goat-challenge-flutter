@@ -41,6 +41,12 @@ class DetailPageController extends GetxController with StateMixin<DetailBook> {
     }
   }
 
+  void findSimilarBooksBy(
+      {String? author, String? subject, String? bookshelf}) {
+    Get.toNamed(GoatChallengeRoutes.similar(
+        author: author, subject: subject, bookshelf: bookshelf));
+  }
+
   void launchBookPreview() async {
     if (!status.isSuccess) return;
 
