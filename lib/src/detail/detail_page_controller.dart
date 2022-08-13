@@ -5,7 +5,7 @@ import 'package:goat_challenge/src/route/goat_challenge_routes.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailPageController extends GetxController with StateMixin<DetailBook> {
-  static DetailPageController of() => Get.find();
+  static DetailPageController of() => Get.find(tag: Get.parameters["id"]);
 
   final service = DetailBookService.of();
 

@@ -5,6 +5,9 @@ import 'package:get/route_manager.dart';
 import 'package:goat_challenge/src/common/goat_challenges_consts.dart';
 import 'package:goat_challenge/src/detail/detail_page_controller.dart';
 import 'package:goat_challenge/src/detail/services/detail_book_service.dart';
+import 'package:goat_challenge/src/detail/widgets/detail_app_bar.dart';
+import 'package:goat_challenge/src/detail/widgets/detail_section_with_list.dart';
+import 'package:goat_challenge/src/detail/widgets/detail_section_with_value.dart';
 import 'package:goat_challenge/src/detail/widgets/detail_summary.dart';
 import 'package:intl/intl.dart';
 
@@ -14,7 +17,7 @@ class DetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.lazyPut(() => DetailBookService());
-    Get.lazyPut(() => DetailPageController());
+    Get.lazyPut(() => DetailPageController(), tag: Get.parameters["id"]);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -29,25 +32,7 @@ class DetailPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: IconButton(
-                            onPressed: Get.back,
-                            icon: const Icon(Icons.arrow_back),
-                            visualDensity: VisualDensity.compact,
-                          ),
-                        ),
-                        Text(
-                          "Find out about",
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        Expanded(child: Container()),
-                      ],
-                    ),
+                    const DetailAppBar(),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 15.h),
                       child: DetailSummary(
@@ -63,212 +48,63 @@ class DetailPage extends StatelessWidget {
                     if (book.subjects.isNotEmpty)
                       Container(
                         margin: EdgeInsets.symmetric(vertical: 7.h),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Subjects",
-                              style: TextStyle(
-                                fontSize: 15.8.sp,
-                                color: Colors.black87,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 7.h),
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                physics: const ClampingScrollPhysics(),
-                                itemCount: book.subjects.length,
-                                itemBuilder: (context, index) => InkWell(
-                                  onTap: () => DetailPageController.of()
-                                      .findSimilarBooksBy(
-                                          subject: book.subjects[index]),
-                                  child: Container(
-                                    margin:
-                                        EdgeInsets.symmetric(vertical: 2.25.h),
-                                    child: Text(
-                                      "· ${book.subjects[index]}",
-                                      style: TextStyle(
-                                        fontSize: 14.sp,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
+                        child: DetailSectionWithList(
+                          title: "Subjects",
+                          items: book.subjects,
+                          onItemTap: (subject) =>
+                              DetailPageController.of().findSimilarBooksBy(
+                            subject: subject,
+                          ),
                         ),
                       ),
                     if (book.bookshelves.isNotEmpty)
                       Container(
                         margin: EdgeInsets.symmetric(vertical: 7.h),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Bookshelves",
-                              style: TextStyle(
-                                fontSize: 15.8.sp,
-                                color: Colors.black87,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 7.h),
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                physics: const ClampingScrollPhysics(),
-                                itemCount: book.bookshelves.length,
-                                itemBuilder: (context, index) => InkWell(
-                                  onTap: () => DetailPageController.of()
-                                      .findSimilarBooksBy(
-                                          bookshelf: book.bookshelves[index]),
-                                  child: Container(
-                                    margin:
-                                        EdgeInsets.symmetric(vertical: 2.25.h),
-                                    child: Text(
-                                      "· ${book.bookshelves[index]}",
-                                      style: TextStyle(
-                                        fontSize: 14.sp,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
+                        child: DetailSectionWithList(
+                          title: "Bookshelves",
+                          items: book.bookshelves,
+                          onItemTap: (bookshelf) =>
+                              DetailPageController.of().findSimilarBooksBy(
+                            bookshelf: bookshelf,
+                          ),
                         ),
                       ),
                     if (book.authors.isNotEmpty)
                       Container(
                         margin: EdgeInsets.symmetric(vertical: 7.h),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "All Authors",
-                              style: TextStyle(
-                                fontSize: 15.8.sp,
-                                color: Colors.black87,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 7.h),
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                physics: const ClampingScrollPhysics(),
-                                itemCount: book.authors.length,
-                                itemBuilder: (context, index) => InkWell(
-                                  onTap: () => DetailPageController.of()
-                                      .findSimilarBooksBy(
-                                          author: book.bookshelves[index]),
-                                  child: Container(
-                                    margin:
-                                        EdgeInsets.symmetric(vertical: 2.25.h),
-                                    child: Text(
-                                      "· ${book.authors[index].name}",
-                                      style: TextStyle(
-                                        fontSize: 14.sp,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
+                        child: DetailSectionWithList(
+                          title: "All Authors",
+                          items: book.authors
+                              .map((author) => author.name)
+                              .toList(growable: false),
+                          onItemTap: (author) =>
+                              DetailPageController.of().findSimilarBooksBy(
+                            author: author,
+                          ),
                         ),
                       ),
                     if (book.translators.isNotEmpty)
                       Container(
                         margin: EdgeInsets.symmetric(vertical: 7.h),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "All Translators",
-                              style: TextStyle(
-                                fontSize: 15.8.sp,
-                                color: Colors.black87,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 7.h),
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                physics: const ClampingScrollPhysics(),
-                                itemCount: book.translators.length,
-                                itemBuilder: (context, index) => Container(
-                                  margin:
-                                      EdgeInsets.symmetric(vertical: 2.25.h),
-                                  child: Text(
-                                    "· ${book.translators[index].name}",
-                                    style: TextStyle(
-                                      fontSize: 14.sp,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
+                        child: DetailSectionWithList(
+                          title: "All Translators",
+                          items: book.translators
+                              .map((translator) => translator.name)
+                              .toList(growable: false),
                         ),
                       ),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 7.h),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Copyright",
-                            style: TextStyle(
-                              fontSize: 15.8.sp,
-                              color: Colors.black87,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 7.h),
-                            child: Text(
-                              book.copyright ? "Yes" : "No",
-                              style: TextStyle(
-                                fontSize: 14.sp,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      child: DetailSectionWithValue(
+                          title: "Copyright",
+                          value: book.copyright ? "Yes" : "No"),
                     ),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 7.h),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Download Counts",
-                            style: TextStyle(
-                              fontSize: 15.8.sp,
-                              color: Colors.black87,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 7.h),
-                            child: Text(
-                              NumberFormat.compact().format(book.downloadCount),
-                              style: TextStyle(
-                                fontSize: 14.sp,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ),
-                        ],
+                      child: DetailSectionWithValue(
+                        title: "Download Counts",
+                        value:
+                            NumberFormat.compact().format(book.downloadCount),
                       ),
                     ),
                     Container(

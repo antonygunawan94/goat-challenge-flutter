@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:goat_challenge/src/main/main_page_controller.dart';
+import 'package:goat_challenge/src/similar/similar_page_controller.dart';
 
 class SimilarBook extends StatelessWidget {
   final int id;
@@ -36,7 +36,7 @@ class SimilarBook extends StatelessWidget {
       child: Material(
         type: MaterialType.transparency,
         child: InkWell(
-          onTap: () => MainPageController.of().goToBookDetail(id),
+          onTap: () => SimilarPageController.of().goToBookDetail(id),
           child: Row(
             children: [
               CachedNetworkImage(

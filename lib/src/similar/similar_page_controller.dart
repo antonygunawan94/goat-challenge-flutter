@@ -48,7 +48,8 @@ class SimilarPageController extends GetxController
   }
 
   void goToBookDetail(int id) {
-    Get.toNamed(GoatChallengeRoutes.detail(id: id));
+    print("id:$id");
+    Get.toNamed(GoatChallengeRoutes.detail(id: id), preventDuplicates: false);
   }
 
   void searchBooks({String search = "", String topic = ""}) async {
