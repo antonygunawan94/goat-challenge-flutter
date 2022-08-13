@@ -7,12 +7,19 @@ import 'package:goat_challenge/src/similar/widgets/similar_app_bar.dart';
 import 'package:goat_challenge/src/similar/widgets/similar_books.dart';
 
 class SimilarPage extends StatelessWidget {
-  const SimilarPage({Key? key}) : super(key: key);
+  final String? author;
+  final String? subject;
+  final String? bookshelf;
+
+  const SimilarPage({Key? key, this.author, this.subject, this.bookshelf})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final tag = "author_${author}_subject_${subject}_bookshelf_$bookshelf";
+
     Get.lazyPut(() => SimilarBookService());
-    Get.lazyPut(() => SimilarPageController());
+    Get.lazyPut(() => SimilarPageController(), tag: tag);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -21,9 +28,9 @@ class SimilarPage extends StatelessWidget {
           children: [
             Container(
               margin: EdgeInsets.only(top: 15.h, bottom: 7.h),
-              child: const SimilarAppBar(),
+              child: SimilarAppBar(tag: tag),
             ),
-            const Expanded(child: SimilarBooks()),
+            Expanded(child: SimilarBooks(tag: tag)),
           ],
         ),
       ),

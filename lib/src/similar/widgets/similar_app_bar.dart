@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import 'package:goat_challenge/src/similar/similar_page_controller.dart';
 
 class SimilarAppBar extends StatelessWidget {
-  const SimilarAppBar({Key? key}) : super(key: key);
+  final String tag;
+
+  const SimilarAppBar({Key? key, required this.tag}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class SimilarAppBar extends StatelessWidget {
         Expanded(
           flex: 3,
           child: Text(
-            "Similar books by ${SimilarPageController.of().findBy}",
+            "Similar books by ${SimilarPageController.of(tag).findBy}",
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(

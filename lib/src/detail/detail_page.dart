@@ -12,17 +12,23 @@ import 'package:goat_challenge/src/detail/widgets/detail_summary.dart';
 import 'package:intl/intl.dart';
 
 class DetailPage extends StatelessWidget {
-  const DetailPage({Key? key}) : super(key: key);
+  final int id;
+
+  const DetailPage({Key? key, required this.id}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final tag = "$id";
+
     Get.lazyPut(() => DetailBookService());
-    Get.lazyPut(() => DetailPageController(), tag: Get.parameters["id"]);
+    Get.lazyPut(() => DetailPageController(), tag: tag);
+
+    final controller = DetailPageController.of(tag);
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: DetailPageController.of().obx(
+        child: controller.obx(
           (book) {
             if (book == null) return const Center(child: Text("Not found"));
 
@@ -36,6 +42,8 @@ class DetailPage extends StatelessWidget {
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 15.h),
                       child: DetailSummary(
+                        tag: tag,
+                        id: id,
                         title: book.title,
                         imageUrl: book.formats.imageJpeg ??
                             GoatChallengeConsts.emptyImageLink,
@@ -51,8 +59,7 @@ class DetailPage extends StatelessWidget {
                         child: DetailSectionWithList(
                           title: "Subjects",
                           items: book.subjects,
-                          onItemTap: (subject) =>
-                              DetailPageController.of().findSimilarBooksBy(
+                          onItemTap: (subject) => controller.findSimilarBooksBy(
                             subject: subject,
                           ),
                         ),
@@ -64,7 +71,7 @@ class DetailPage extends StatelessWidget {
                           title: "Bookshelves",
                           items: book.bookshelves,
                           onItemTap: (bookshelf) =>
-                              DetailPageController.of().findSimilarBooksBy(
+                              controller.findSimilarBooksBy(
                             bookshelf: bookshelf,
                           ),
                         ),
@@ -77,8 +84,7 @@ class DetailPage extends StatelessWidget {
                           items: book.authors
                               .map((author) => author.name)
                               .toList(growable: false),
-                          onItemTap: (author) =>
-                              DetailPageController.of().findSimilarBooksBy(
+                          onItemTap: (author) => controller.findSimilarBooksBy(
                             author: author,
                           ),
                         ),
@@ -111,8 +117,7 @@ class DetailPage extends StatelessWidget {
                       margin: EdgeInsets.symmetric(vertical: 7.h),
                       child: Center(
                         child: TextButton(
-                          onPressed:
-                              DetailPageController.of().launchBookPreview,
+                          onPressed: controller.launchBookPreview,
                           child: const Text("Preview"),
                         ),
                       ),

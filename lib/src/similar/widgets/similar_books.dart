@@ -6,11 +6,13 @@ import 'package:goat_challenge/src/similar/similar_page_controller.dart';
 import 'package:goat_challenge/src/similar/widgets/similar_book.dart';
 
 class SimilarBooks extends StatelessWidget {
-  const SimilarBooks({Key? key}) : super(key: key);
+  final String tag;
+
+  const SimilarBooks({Key? key, required this.tag}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final similarPageController = SimilarPageController.of();
+    final similarPageController = SimilarPageController.of(tag);
 
     return similarPageController.obx(
       (books) {
@@ -44,6 +46,7 @@ class SimilarBooks extends StatelessWidget {
             return Container(
               margin: margin,
               child: SimilarBook(
+                tag: tag,
                 id: book.id,
                 title: book.title,
                 author: book.authors.isNotEmpty

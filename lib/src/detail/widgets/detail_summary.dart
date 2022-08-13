@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:goat_challenge/src/detail/detail_page_controller.dart';
 
 class DetailSummary extends StatelessWidget {
+  final String tag;
+  final int id;
   final String title;
   final String imageUrl;
   final String? author;
@@ -11,6 +13,8 @@ class DetailSummary extends StatelessWidget {
 
   const DetailSummary({
     Key? key,
+    required this.tag,
+    required this.id,
     required this.title,
     required this.imageUrl,
     required this.author,
@@ -62,7 +66,7 @@ class DetailSummary extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: author != null
-                        ? () => DetailPageController.of()
+                        ? () => DetailPageController.of(tag)
                             .findSimilarBooksBy(author: author!)
                         : null,
                     child: Container(

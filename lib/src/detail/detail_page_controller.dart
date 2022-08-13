@@ -5,7 +5,7 @@ import 'package:goat_challenge/src/route/goat_challenge_routes.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailPageController extends GetxController with StateMixin<DetailBook> {
-  static DetailPageController of() => Get.find(tag: Get.parameters["id"]);
+  static DetailPageController of(String tag) => Get.find(tag: tag);
 
   final service = DetailBookService.of();
 
@@ -30,7 +30,7 @@ class DetailPageController extends GetxController with StateMixin<DetailBook> {
       final response = await service.fetchBook(int.parse(id));
 
       if (response.hasError) {
-        change(null, status: RxStatus.error(response.body["detail"]));
+        change(null, status: RxStatus.error(response.bodyString));
         return;
       }
 

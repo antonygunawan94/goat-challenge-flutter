@@ -7,7 +7,8 @@ import 'package:goat_challenge/src/similar/services/similar_book_service.dart';
 
 class SimilarPageController extends GetxController
     with StateMixin<List<SimilarBook>> {
-  static SimilarPageController of() => Get.find<SimilarPageController>();
+  static SimilarPageController of(String tag) =>
+      Get.find<SimilarPageController>(tag: tag);
 
   final _service = SimilarBookService.of();
   final _scrollController = ScrollController();
@@ -48,7 +49,6 @@ class SimilarPageController extends GetxController
   }
 
   void goToBookDetail(int id) {
-    print("id:$id");
     Get.toNamed(GoatChallengeRoutes.detail(id: id), preventDuplicates: false);
   }
 
@@ -100,8 +100,6 @@ class SimilarPageController extends GetxController
       change(state, status: RxStatus.success());
       return;
     }
-
-    print("next: $next");
 
     try {
       final response = await _service.nextBooks(next);

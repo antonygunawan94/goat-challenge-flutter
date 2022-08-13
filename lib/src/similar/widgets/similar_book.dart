@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:goat_challenge/src/similar/similar_page_controller.dart';
 
 class SimilarBook extends StatelessWidget {
+  final String tag;
   final int id;
   final String title;
   final String imageUrl;
@@ -12,6 +13,7 @@ class SimilarBook extends StatelessWidget {
 
   const SimilarBook({
     Key? key,
+    required this.tag,
     required this.id,
     required this.title,
     required this.imageUrl,
@@ -36,7 +38,7 @@ class SimilarBook extends StatelessWidget {
       child: Material(
         type: MaterialType.transparency,
         child: InkWell(
-          onTap: () => SimilarPageController.of().goToBookDetail(id),
+          onTap: () => SimilarPageController.of(tag).goToBookDetail(id),
           child: Row(
             children: [
               CachedNetworkImage(

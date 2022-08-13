@@ -22,11 +22,15 @@ class GoatChallengeApp extends StatelessWidget {
           ),
           GetPage(
             name: GoatChallengeRoutes.similar(),
-            page: () => const SimilarPage(),
+            page: () => SimilarPage(
+              author: Get.parameters["author"],
+              subject: Get.parameters["subject"],
+              bookshelf: Get.parameters["bookshelf"],
+            ),
           ),
           GetPage(
             name: GoatChallengeRoutes.detail(),
-            page: () => const DetailPage(),
+            page: () => DetailPage(id: int.parse(Get.parameters["id"]!)),
           ),
         ],
       ),
