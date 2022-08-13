@@ -4,13 +4,10 @@ Goat Flutter Challenge
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+1. Run pub get command from your terminal `flutter pub run`.
+2. Open your Android / IOS emulator or connect your phone to your PC.
+3. Run flutter run command from your terminal `flutter run`.
+4. For better performance run it on release mode `flutter run --release`
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Github Repository
+https://github.com/antonygunawan94/goat-challenge-flutter
